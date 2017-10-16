@@ -40,6 +40,7 @@
 #import "BKPubKey.h"
 #import "SSHCopyIDSession.h"
 #import "SSHSession.h"
+#import "SSHSession2.h"
 
 #define MCP_MAX_LINE 4096
 
@@ -106,6 +107,8 @@
         // Probably passing a Server struct of some type.
 
         [self runSSHWithArgs:cmdline];
+      } else if ([cmd isEqualToString:@"ssh2"]) {
+	[self runSSH2WithArgs:cmdline];
       } else if ([cmd isEqualToString:@"exit"]) {
         break;
       } else if ([cmd isEqualToString:@"ssh-copy-id"]) {
@@ -155,6 +158,14 @@
 {
   [self.delegate indexCommand:args];
   _childSession = [[SSHSession alloc] initWithStream:_stream];
+  [_childSession executeAttachedWithArgs:args];
+  _childSession = nil;
+}
+
+- (void)runSSH2WithArgs:(NSString *)args
+{
+  [self.delegate indexCommand:args];
+  _childSession = [[SSHSession2 alloc] initWithStream:_stream];
   [_childSession executeAttachedWithArgs:args];
   _childSession = nil;
 }

@@ -100,6 +100,9 @@
 		076FBE531DB80AC900F6D997 /* termcontrol.js in Resources */ = {isa = PBXBuildFile; fileRef = 070058EB1D12FA6D00D133E3 /* termcontrol.js */; };
 		076FBE551DB80AC900F6D997 /* MBProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0732F10D1D062BF700AB5438 /* MBProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		076FBE561DB80AC900F6D997 /* UICKeyChainStore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0732F1171D062CA000AB5438 /* UICKeyChainStore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0786C2EF1F9551F100421921 /* libssh.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0786C2EB1F9551F100421921 /* libssh.4.dylib */; };
+		0786C2F01F95520500421921 /* libssh.4.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0786C2EB1F9551F100421921 /* libssh.4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		0786C2F31F95545A00421921 /* SSHSession2.m in Sources */ = {isa = PBXBuildFile; fileRef = 0786C2F21F95545A00421921 /* SSHSession2.m */; };
 		079635871D0E6602000473B1 /* TermView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079635841D0E6602000473B1 /* TermView.m */; };
 		079635881D0E6602000473B1 /* fterm.m in Sources */ = {isa = PBXBuildFile; fileRef = 079635851D0E6602000473B1 /* fterm.m */; };
 		079635DC1D0F8219000473B1 /* webfont.js in Resources */ = {isa = PBXBuildFile; fileRef = 079635DA1D0F8219000473B1 /* webfont.js */; };
@@ -275,6 +278,7 @@
 			files = (
 				0732F1231D062DDB00AB5438 /* MBProgressHUD.framework in Embed Frameworks */,
 				0732F11F1D062DDB00AB5438 /* UICKeyChainStore.framework in Embed Frameworks */,
+				0786C2F01F95520500421921 /* libssh.4.dylib in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -321,6 +325,16 @@
 		076FBD4F1DB6BD9400F6D997 /* libmoshios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = libmoshios.framework; sourceTree = "<group>"; };
 		076FBD511DB6BE1D00F6D997 /* libprotobuf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libprotobuf.a; sourceTree = "<group>"; };
 		076FBE5A1DB80AC900F6D997 /* Blink Hockey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Blink Hockey.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0786C2EB1F9551F100421921 /* libssh.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssh.4.dylib; path = lib/libssh.4.dylib; sourceTree = "<group>"; };
+		0786C2F11F95545A00421921 /* SSHSession2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSHSession2.h; sourceTree = "<group>"; };
+		0786C2F21F95545A00421921 /* SSHSession2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSHSession2.m; sourceTree = "<group>"; };
+		0786C2F51F95550000421921 /* callbacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = callbacks.h; sourceTree = "<group>"; };
+		0786C2F61F95550000421921 /* legacy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = legacy.h; sourceTree = "<group>"; };
+		0786C2F71F95550000421921 /* libssh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libssh.h; sourceTree = "<group>"; };
+		0786C2F81F95550000421921 /* libsshpp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = libsshpp.hpp; sourceTree = "<group>"; };
+		0786C2F91F95550000421921 /* server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = server.h; sourceTree = "<group>"; };
+		0786C2FA1F95550000421921 /* sftp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sftp.h; sourceTree = "<group>"; };
+		0786C2FB1F95550000421921 /* ssh2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssh2.h; sourceTree = "<group>"; };
 		0795F29B1DC11C6B00CC8B83 /* Blink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blink.entitlements; sourceTree = "<group>"; };
 		079635831D0E6602000473B1 /* TermView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermView.h; sourceTree = "<group>"; };
 		079635841D0E6602000473B1 /* TermView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermView.m; sourceTree = "<group>"; };
@@ -468,6 +482,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0786C2EF1F9551F100421921 /* libssh.4.dylib in Frameworks */,
 				0732F12B1D06324B00AB5438 /* libstdc++.tbd in Frameworks */,
 				0732F1291D06324200AB5438 /* libcurses.tbd in Frameworks */,
 				0732F1271D06323A00AB5438 /* libz.tbd in Frameworks */,
@@ -542,6 +557,7 @@
 		0732F04F1D062BB300AB5438 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0786C2EB1F9551F100421921 /* libssh.4.dylib */,
 				07AA06321E08B12E008310B7 /* PasscodeLock */,
 				B700AED71DD0F2C200100EBF /* CloudKit.framework */,
 				076FBD4F1DB6BD9400F6D997 /* libmoshios.framework */,
@@ -562,6 +578,7 @@
 		0732F0541D062BB300AB5438 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				0786C2F41F95550000421921 /* libssh */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -625,6 +642,20 @@
 				073D26B61DC4137000965AB2 /* SKNonModifierButton.m */,
 			);
 			path = Button;
+			sourceTree = "<group>";
+		};
+		0786C2F41F95550000421921 /* libssh */ = {
+			isa = PBXGroup;
+			children = (
+				0786C2F51F95550000421921 /* callbacks.h */,
+				0786C2F61F95550000421921 /* legacy.h */,
+				0786C2F71F95550000421921 /* libssh.h */,
+				0786C2F81F95550000421921 /* libsshpp.hpp */,
+				0786C2F91F95550000421921 /* server.h */,
+				0786C2FA1F95550000421921 /* sftp.h */,
+				0786C2FB1F95550000421921 /* ssh2.h */,
+			);
+			path = libssh;
 			sourceTree = "<group>";
 		};
 		07AA06321E08B12E008310B7 /* PasscodeLock */ = {
@@ -721,6 +752,8 @@
 				07F6706E1D05EEE200C0A53C /* SSHCopyIDSession.m */,
 				07F6706F1D05EEE200C0A53C /* SSHSession.h */,
 				07F670701D05EEE200C0A53C /* SSHSession.m */,
+				0786C2F11F95545A00421921 /* SSHSession2.h */,
+				0786C2F21F95545A00421921 /* SSHSession2.m */,
 			);
 			path = Sessions;
 			sourceTree = SOURCE_ROOT;
@@ -1260,6 +1293,7 @@
 				C9B2E0341D6B612400B89F69 /* BKTheme.m in Sources */,
 				0716B5961CFFAB9300268B5B /* TermController.m in Sources */,
 				07AA06581E08B12E008310B7 /* PasscodeSignButton.swift in Sources */,
+				0786C2F31F95545A00421921 /* SSHSession2.m in Sources */,
 				0716B5911CFFAB9300268B5B /* SpaceController.m in Sources */,
 				C989E5671D6CC95A003E0079 /* BKPubKeyViewController.m in Sources */,
 				B7A487651DC7BD65007BA809 /* BKDefaultUserViewController.m in Sources */,
