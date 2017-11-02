@@ -121,13 +121,9 @@ void *run_session(void *params)
 
   // If there is no underlying descriptor (writing to the WV), then duplicate the fterm.
   dupe.out = fdopen(dup(fileno(stream.out)), "w");
-  if (dupe.out == NULL) {
-    dupe.out = fterm_open(stream.control.terminal, 0);
-  }
   dupe.err = fdopen(dup(fileno(stream.err)), "w");
-  if (dupe.err == NULL) {
-    dupe.err = fterm_open(stream.control.terminal, 0);
-  }
+  setvbuf(dupe.out, NULL, _IONBF, 0);
+  setvbuf(dupe.err, NULL, _IONBF, 0);
 
   dupe.control = stream.control;
   dupe.sz = stream.sz;

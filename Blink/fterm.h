@@ -37,4 +37,6 @@ FILE *fterm_open(TermView *wv, unsigned int size);
 
 @interface FUTF8Term : NSObject
 
+- (id)initOnTermView:(TermView *)term fd:(dispatch_fd_t)fd;
+
 @end

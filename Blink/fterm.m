@@ -50,10 +50,10 @@ static int closefn(void *handler);
 
 FILE *fterm_open(TermView *wv, unsigned int size)
 {
-  FUTF8Term *fTerm = [[FUTF8Term alloc] initOnTermView:wv];
-  FILE *desc = funopen(CFBridgingRetain(fTerm), NULL, writefn, NULL, closefn);
-  setvbuf(desc, NULL, _IONBF, 0);
-  return desc;
+  //  FUTF8Term *fTerm = [[FUTF8Term alloc] initOnTermView:wv];
+  //FILE *desc = funopen(CFBridgingRetain(fTerm), NULL, writefn, NULL, closefn);
+  //setvbuf(desc, NULL, _IONBF, 0);
+  return 0;
 }
 
 static int writefn(void *handler, const char *buf, int size)
@@ -80,12 +80,28 @@ static int closefn(void *handler)
   NSData *_splitChar;
 }
 
-- (id)initOnTermView:(TermView *)term
+- (id)initOnTermView:(TermView *)term fd:(dispatch_fd_t)fd
 {
   self = [super init];
 
   if (self) {
     _wv = term;
+
+    // Create channel with a callback
+    dispatch_io_t channel = dispatch_io_create(DISPATCH_IO_STREAM, fd,
+					       dispatch_get_global_queue(0, 0),
+                                               ^(int error) { printf("Error creating channel"); });
+
+    dispatch_io_set_low_water(channel, 1);
+    //dispatch_io_set_high_water(channel, SIZE_MAX);
+    // TODO: Get read of the main queue on TermView write. It will always happen here.
+    dispatch_io_read(channel, 0, SIZE_MAX, dispatch_get_global_queue(0,0),
+		     ^(bool done, dispatch_data_t data, int error) {
+		       // TODO: Handle incomplete UTF sequences and other encodings
+		       NSString *output;
+		       output = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+		       [_wv write:output];
+		     });
   }
 
   return self;
@@ -98,8 +114,8 @@ static int closefn(void *handler)
   if (_splitChar) {
     [data appendData:_splitChar];
     _splitChar = nil;
-  }
-
+  
+} 
   [data appendBytes:buf length:len];
   len = (unsigned int)[data length];
 

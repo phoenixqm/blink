@@ -49,6 +49,8 @@ static NSDictionary *bkModifierMaps = nil;
 
 @implementation TermController {
   int _pinput[2];
+  int _poutput[2];
+  int _perror[2];
   MCPSession *_session;
   BOOL _viewIsLocked;
   BOOL _appearanceChanged;
@@ -245,8 +247,18 @@ static NSDictionary *bkModifierMaps = nil;
 - (void)createPTY
 {
   pipe(_pinput);
-  _termout = fterm_open(_terminal, 0);
-  _termerr = fterm_open(_terminal, 0);
+  pipe(_poutput);
+  pipe(_perror);
+  
+  // TODO: We do not need the wrapper in any way. Maybe an extension? "Connect" or listenOn function on TermView?
+  [[FUTF8Term alloc] initOnTermView:_terminal fd:_poutput[0]];
+  [[FUTF8Term alloc] initOnTermView:_terminal fd:_perror[0]];
+  _termout = fdopen(_poutput[1], "w");
+  _termerr = fdopen(_perror[1], "w");
+  setvbuf(_termout, NULL, _IONBF, 0);
+  setvbuf(_termerr, NULL, _IONBF, 0);
+  //_termout = fterm_open(_terminal, 0);
+  //_termerr = fterm_open(_terminal, 0);
   _termin = fdopen(_pinput[0], "r");
   _termsz = malloc(sizeof(struct winsize));
 }
