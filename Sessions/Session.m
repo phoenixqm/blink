@@ -164,4 +164,7 @@ void *run_session(void *params)
   return params;
 }
 
+- (void)sigwinch {}
+- (void)kill {}
+
 @end
