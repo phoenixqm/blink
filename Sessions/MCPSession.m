@@ -62,7 +62,7 @@
 
 - (void)setTitle
 {
-  fprintf(_stream.control.termout, "\033]0;blink\007");
+  fprintf(_stream.out, "\033]0;blink\007");
 }
 
 - (int)main:(int)argc argv:(char **)argv

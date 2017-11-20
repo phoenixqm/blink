@@ -37,7 +37,8 @@
 #import "BKTheme.h"
 #import "MCPSession.h"
 #import "Session.h"
-#import "fterm.h"
+#import "TermDevice.h"
+
 
 NSString * const BKUserActivityTypeCommandLine = @"com.blink.cmdline";
 NSString * const BKUserActivityCommandLineKey = @"com.blink.cmdline.key";
@@ -48,9 +49,7 @@ static NSDictionary *bkModifierMaps = nil;
 @end
 
 @implementation TermController {
-  int _pinput[2];
-  int _poutput[2];
-  int _perror[2];
+  TermDevice *_device;
   MCPSession *_session;
   BOOL _viewIsLocked;
   BOOL _appearanceChanged;
@@ -72,8 +71,8 @@ static NSDictionary *bkModifierMaps = nil;
 - (void)write:(NSString *)input
 {
   // Trasform the string and write it, with the correct sequence
-  const char *str = [input UTF8String];
-  write(_pinput[1], str, [input lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+  // TODO: Write to the device, and let it handle whatever it has to handle in the right encoding, etc...
+  [_device write: input];
 }
 
 - (void)loadView
@@ -240,43 +239,17 @@ static NSDictionary *bkModifierMaps = nil;
   [super viewDidLoad];
 
   [_terminal loadTerminal];
-
-  [self createPTY];
-}
-
-- (void)createPTY
-{
-  pipe(_pinput);
-  pipe(_poutput);
-  pipe(_perror);
-  
-  // TODO: We do not need the wrapper in any way. Maybe an extension? "Connect" or listenOn function on TermView?
-  [[FUTF8Term alloc] initOnTermView:_terminal fd:_poutput[0]];
-  [[FUTF8Term alloc] initOnTermView:_terminal fd:_perror[0]];
-  _termout = fdopen(_poutput[1], "w");
-  _termerr = fdopen(_perror[1], "w");
-  setvbuf(_termout, NULL, _IONBF, 0);
-  setvbuf(_termerr, NULL, _IONBF, 0);
-  //_termout = fterm_open(_terminal, 0);
-  //_termerr = fterm_open(_terminal, 0);
-  _termin = fdopen(_pinput[0], "r");
-  _termsz = malloc(sizeof(struct winsize));
 }
 
 - (void)startSession
 {
   // Until we are able to duplicate the streams, we have to recreate them.
-  TermStream *stream = [[TermStream alloc] init];
-  stream.in = _termin;
-  stream.out = _termout;
-  stream.err = _termerr;
-  stream.control = self;
-  stream.sz = _termsz;
+  _device = [[TermDevice alloc] init];
+  _device.control = _terminal;
 
-  _session = [[MCPSession alloc] initWithStream:stream];
+  _session = [[MCPSession alloc] initWithStream:_device.stream];
   _session.delegate = self;
   [_session executeWithArgs:@""];
-  
   
   // TODO: find a way to handle this in execute with args
   if ([self.userActivity.activityType isEqualToString: BKUserActivityTypeCommandLine]) {
@@ -300,8 +273,8 @@ static NSDictionary *bkModifierMaps = nil;
 
 - (void)updateTermRows:(NSNumber *)rows Cols:(NSNumber *)cols
 {
-  _termsz->ws_row = rows.shortValue;
-  _termsz->ws_col = cols.shortValue;
+  _device.stream.sz->ws_row = rows.shortValue;
+  _device.stream.sz->ws_col = cols.shortValue;
   if ([self.delegate respondsToSelector:@selector(terminalDidResize:)]) {
     [self.delegate terminalDidResize:self];
   }
@@ -324,22 +297,6 @@ static NSDictionary *bkModifierMaps = nil;
 
 - (void)dealloc
 {
-  if (_termin) {
-    fclose(_termin);
-    _termin = NULL;
-  }
-  if (_termout) {
-    fclose(_termout);
-    _termout = NULL;
-  }
-  if (_termerr) {
-    fclose(_termerr);
-    _termerr = NULL;
-  }
-  if (_termsz) {
-    free(_termsz);
-    _termsz = NULL;
-  }
   [self.userActivity resignCurrent];
 }
 

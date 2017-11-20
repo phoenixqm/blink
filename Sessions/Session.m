@@ -35,7 +35,6 @@
 #include <unistd.h>
 
 #import "Session.h"
-#import "fterm.h"
 
 
 int makeargs(const char *args, char ***aa)
