@@ -83,87 +83,42 @@
 
 - (void)loop
 {
-  fd_set fds;
-  struct timeval timeout;
-  char buffer[4096];
-  ssh_buffer readbuf=ssh_buffer_new();
-  ssh_channel channels[2];
-  int lus;
-  int eof=0;
-  int maxfd, infd;
-  int ret;
+  ssh_connector connector_in, connector_out, connector_err;
+  ssh_event event = ssh_event_new();
 
-  infd = fileno(_stream.in);
+  /* stdin */
+  connector_in = ssh_connector_new(_session);
+  ssh_connector_set_out_channel(connector_in, _channel, SSH_CONNECTOR_STDOUT);
+  ssh_connector_set_in_fd(connector_in, fileno(_stream.in));
+  ssh_event_add_connector(event, connector_in);
 
-  while(_channel) {
-    do {
-      FD_ZERO(&fds);
+  /* stdout */
+  connector_out = ssh_connector_new(_session);
+  ssh_connector_set_out_fd(connector_out, fileno(_stream.out));
+  ssh_connector_set_in_channel(connector_out, _channel, SSH_CONNECTOR_STDOUT);
+  ssh_event_add_connector(event, connector_out);
 
-      if(!eof) {
-	FD_SET(infd, &fds);
-      }
+  /* stderr */
+//  connector_err = ssh_connector_new(_session);
+//  ssh_connector_set_out_fd(connector_err, fileno(_stream.err));
+//  ssh_connector_set_in_channel(connector_err, _channel, SSH_CONNECTOR_STDERR);
+//  ssh_event_add_connector(event, connector_err);
 
-      timeout.tv_sec=30;
-      timeout.tv_usec=0;
-      FD_SET(ssh_get_fd(_session),&fds);
-      maxfd=ssh_get_fd(_session)+1;
-      ret=select(maxfd,&fds,NULL,NULL,&timeout);
-
-      if(ret==EINTR)
-	continue;
-
-      if(FD_ISSET(infd, &fds)){
-	lus=read(infd,buffer,sizeof(buffer));
-	if(lus)
-	  ssh_channel_write(_channel,buffer,lus);
-	else {
-	  eof=1;
-	  ssh_channel_send_eof(_channel);
-	}
-      }
-      if(FD_ISSET(ssh_get_fd(_session),&fds)){
-	ssh_set_fd_toread(_session);
-      }
-      channels[0]=_channel; // set the first channel we want to read from
-      channels[1]=NULL;
-      ret=ssh_channel_select(channels,NULL,NULL,NULL); // no specific timeout - just poll
-      // if(signal_delayed)
-      // 	sizechanged();
-    } while (ret==EINTR || ret==SSH_EINTR);
-
-    // we already looked for input from stdin. Now, we are looking for input from the channel
-
-    if(_channel && ssh_channel_is_closed(_channel)){
-      ssh_channel_free(_channel);
-      _channel=NULL;
-      channels[0]=NULL;
-    }
-    if(channels[0]){
-      while(_channel && ssh_channel_is_open(_channel) && ssh_channel_poll(_channel,0)>0){
-	lus=channel_read_buffer(_channel,readbuf,0,0);
-	if(lus==-1){
-    [self dieMsg:@"Error reading channel"];
-    break;
-	  // fprintf(stderr, "Error reading channel: %s\n",
-	  // 	  ssh_get_error(session));
-	}
-	if(lus==0){
-	  ssh_channel_free(_channel);
-	  _channel=channels[0]=NULL;
-	} else
-	  if (fwrite(ssh_buffer_get(readbuf),1,lus,_stream.out) < 0) {
-	    [self dieMsg:@"Error writing"];
-      break;
-	  }
-      }
-    }
-    if(_channel && ssh_channel_is_closed(_channel)){
-      ssh_channel_free(_channel);
-      _channel=NULL;
-    }
+  while(ssh_channel_is_open(_channel)){
+    //    if(signal_delayed)
+    //      sizechanged();
+    ssh_event_dopoll(event, 60000);
   }
+  ssh_event_remove_connector(event, connector_in);
+  ssh_event_remove_connector(event, connector_out);
+  //ssh_event_remove_connector(event, connector_err);
 
-  ssh_buffer_free(readbuf);
+  ssh_connector_free(connector_in);
+  ssh_connector_free(connector_out);
+  //ssh_connector_free(connector_err);
+
+  ssh_event_free(event);
+  ssh_channel_free(_channel);
 }
 
 - (int)dieMsg:(NSString *)msg

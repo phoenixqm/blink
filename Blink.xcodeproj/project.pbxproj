@@ -1563,7 +1563,7 @@
 					"$(PROJECT_DIR)/Frameworks/lib",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = Com.CarlosCabanero.BlinkShell;
+				PRODUCT_BUNDLE_IDENTIFIER = Com.CarlosCabanero.BlinkShell.debug;
 				PRODUCT_NAME = Blink;
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
@@ -1598,7 +1598,7 @@
 					"$(PROJECT_DIR)/Frameworks/lib",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = Com.CarlosCabanero.BlinkShell;
+				PRODUCT_BUNDLE_IDENTIFIER = Com.CarlosCabanero.BlinkShell.debug;
 				PRODUCT_NAME = Blink;
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
