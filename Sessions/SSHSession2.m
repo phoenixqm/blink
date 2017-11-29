@@ -1,10 +1,22 @@
 #include <libssh/libssh.h>
+#include <libssh/callbacks.h>
 #include <sys/time.h>
 
 #import "SSHSession2.h"
 
 @interface SSHSession2 ()
 @end
+
+void loggingEvent(ssh_session session, int priority, const char *message, void *userdata)
+{
+  printf("%s\n", message);
+}
+
+struct ssh_callbacks_struct cb = {
+  .userdata = NULL,
+  .auth_function = NULL,
+  .log_function = loggingEvent
+};
 
 @implementation SSHSession2 {
   ssh_session _session;
@@ -17,12 +29,15 @@
   if (_session == NULL) {
     return [self dieMsg:@"Couldn't start ssh session"];
   }
+  ssh_callbacks_init(&cb);
+  ssh_set_callbacks(_session, &cb);
+  ssh_set_log_level(100);
   // TODO: This is for some reason necessary. Maybe we need to setup threads.
   if (!ssh_is_connected(_session)) {
     [self debugMsg:@"Yo!"];
   }
   // TODO: Configure session
-  if (ssh_options_set(_session, SSH_OPTIONS_HOST, "25.33.115.47") < 0) {
+  if (ssh_options_set(_session, SSH_OPTIONS_HOST, "192.168.128.109") < 0) {
     [self dieMsg:@"Error setting host"];
   }
   if (ssh_options_set(_session, SSH_OPTIONS_USER, "carlos") < 0) {
@@ -85,7 +100,9 @@
 {
   ssh_connector connector_in, connector_out, connector_err;
   ssh_event event = ssh_event_new();
-
+  
+  //  ssh_set_blocking(_session, 0);
+  //  ssh_channel_set_blocking(_channel, 0);
   /* stdin */
   connector_in = ssh_connector_new(_session);
   ssh_connector_set_out_channel(connector_in, _channel, SSH_CONNECTOR_STDOUT);
@@ -104,7 +121,7 @@
 //  ssh_connector_set_in_channel(connector_err, _channel, SSH_CONNECTOR_STDERR);
 //  ssh_event_add_connector(event, connector_err);
 
-  while(ssh_channel_is_open(_channel)){
+  while(1){
     //    if(signal_delayed)
     //      sizechanged();
     ssh_event_dopoll(event, 60000);
