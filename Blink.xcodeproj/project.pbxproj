@@ -15,6 +15,8 @@
 		0716B5961CFFAB9300268B5B /* TermController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0716B5621CFFAB9300268B5B /* TermController.m */; };
 		0716B5A71CFFABB000268B5B /* BlinkUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0716B5A51CFFABB000268B5B /* BlinkUITests.m */; };
 		0716B5A81CFFABB000268B5B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0716B5A61CFFABB000268B5B /* Info.plist */; };
+		0720FF9A1FE0366C00843426 /* libsshd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0720FF991FE0366C00843426 /* libsshd.a */; };
+		0720FF9B1FE0373500843426 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0732F12A1D06324B00AB5438 /* libstdc++.tbd */; };
 		0728A1DA1E0AE80400ABD31B /* SmartKeysController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0728A1D91E0AE80400ABD31B /* SmartKeysController.m */; };
 		0732F04C1D062B9A00AB5438 /* hterm_all.js in Resources */ = {isa = PBXBuildFile; fileRef = 0732F0491D062B9A00AB5438 /* hterm_all.js */; };
 		0732F04D1D062B9A00AB5438 /* locales.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0732F04A1D062B9A00AB5438 /* locales.bundle */; };
@@ -27,15 +29,12 @@
 		0732F1231D062DDB00AB5438 /* MBProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0732F10D1D062BF700AB5438 /* MBProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0732F1271D06323A00AB5438 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0732F1261D06323A00AB5438 /* libz.tbd */; };
 		0732F1291D06324200AB5438 /* libcurses.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0732F1281D06324200AB5438 /* libcurses.tbd */; };
-		0732F12B1D06324B00AB5438 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0732F12A1D06324B00AB5438 /* libstdc++.tbd */; };
 		073D26BC1DC4137000965AB2 /* SKButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 073D26B21DC4137000965AB2 /* SKButton.m */; };
 		073D26BD1DC4137000965AB2 /* SKModifierButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 073D26B41DC4137000965AB2 /* SKModifierButton.m */; };
 		073D26BE1DC4137000965AB2 /* SKNonModifierButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 073D26B61DC4137000965AB2 /* SKNonModifierButton.m */; };
 		073D26C01DC4137000965AB2 /* SmartKeys.xib in Resources */ = {isa = PBXBuildFile; fileRef = 073D26B91DC4137000965AB2 /* SmartKeys.xib */; };
 		073D26C11DC4137000965AB2 /* SmartKeysView.m in Sources */ = {isa = PBXBuildFile; fileRef = 073D26BB1DC4137000965AB2 /* SmartKeysView.m */; };
 		074F30791D062A2800A73445 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 074F30781D062A2800A73445 /* main.m */; };
-		07609A5C1FCC70410064D6F3 /* libsshd.4.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07609A5B1FCC70410064D6F3 /* libsshd.4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		07609A5D1FCC705E0064D6F3 /* libsshd.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 07609A5B1FCC70410064D6F3 /* libsshd.4.dylib */; };
 		076FBD501DB6BD9400F6D997 /* libmoshios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076FBD4F1DB6BD9400F6D997 /* libmoshios.framework */; };
 		076FBD521DB6BE1D00F6D997 /* libprotobuf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 076FBD511DB6BE1D00F6D997 /* libprotobuf.a */; };
 		076FBE111DB80AC900F6D997 /* DismissSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = C94E9B621D6BA21C00DA4DD6 /* DismissSegue.m */; };
@@ -275,7 +274,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				07609A5C1FCC70410064D6F3 /* libsshd.4.dylib in Embed Frameworks */,
 				0732F1231D062DDB00AB5438 /* MBProgressHUD.framework in Embed Frameworks */,
 				0732F11F1D062DDB00AB5438 /* UICKeyChainStore.framework in Embed Frameworks */,
 			);
@@ -297,6 +295,7 @@
 		0716B5621CFFAB9300268B5B /* TermController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermController.m; sourceTree = "<group>"; };
 		0716B5A51CFFABB000268B5B /* BlinkUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlinkUITests.m; sourceTree = "<group>"; };
 		0716B5A61CFFABB000268B5B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0720FF991FE0366C00843426 /* libsshd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsshd.a; sourceTree = "<group>"; };
 		0728A1D81E0AE80400ABD31B /* SmartKeysController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartKeysController.h; sourceTree = "<group>"; };
 		0728A1D91E0AE80400ABD31B /* SmartKeysController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmartKeysController.m; sourceTree = "<group>"; };
 		0732F0491D062B9A00AB5438 /* hterm_all.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = hterm_all.js; sourceTree = "<group>"; };
@@ -321,7 +320,6 @@
 		073D26BB1DC4137000965AB2 /* SmartKeysView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmartKeysView.m; sourceTree = "<group>"; };
 		074F30781D062A2800A73445 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0759A8641D6361D1009CF12F /* HockeySDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = HockeySDKResources.bundle; path = Frameworks/HockeySDK.embeddedframework/HockeySDK.framework/Versions/A/Resources/HockeySDKResources.bundle; sourceTree = SOURCE_ROOT; };
-		07609A5B1FCC70410064D6F3 /* libsshd.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsshd.4.dylib; path = Frameworks/lib/libsshd.4.dylib; sourceTree = "<group>"; };
 		076FBD4F1DB6BD9400F6D997 /* libmoshios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = libmoshios.framework; sourceTree = "<group>"; };
 		076FBD511DB6BE1D00F6D997 /* libprotobuf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libprotobuf.a; sourceTree = "<group>"; };
 		076FBE5A1DB80AC900F6D997 /* Blink Hockey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Blink Hockey.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -481,8 +479,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07609A5D1FCC705E0064D6F3 /* libsshd.4.dylib in Frameworks */,
-				0732F12B1D06324B00AB5438 /* libstdc++.tbd in Frameworks */,
+				0720FF9B1FE0373500843426 /* libstdc++.tbd in Frameworks */,
+				0720FF9A1FE0366C00843426 /* libsshd.a in Frameworks */,
 				0732F1291D06324200AB5438 /* libcurses.tbd in Frameworks */,
 				0732F1271D06323A00AB5438 /* libz.tbd in Frameworks */,
 				076FBD521DB6BE1D00F6D997 /* libprotobuf.a in Frameworks */,
@@ -584,6 +582,7 @@
 		0732F0561D062BB300AB5438 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				0720FF991FE0366C00843426 /* libsshd.a */,
 				076FBD511DB6BE1D00F6D997 /* libprotobuf.a */,
 			);
 			path = lib;
@@ -921,7 +920,6 @@
 		EA0BA1821C0CC57B00719C1A = {
 			isa = PBXGroup;
 			children = (
-				07609A5B1FCC70410064D6F3 /* libsshd.4.dylib */,
 				C9B2E0031D6B612300B89F69 /* Settings */,
 				0732F04F1D062BB300AB5438 /* Frameworks */,
 				0732F0481D062B9A00AB5438 /* Resources */,
@@ -1537,6 +1535,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CODE_SIGN_ENTITLEMENTS = Blink/Blink.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1556,7 +1555,7 @@
 				);
 				HEADER_SEARCH_PATHS = $SOURCE_ROOT/Frameworks/include;
 				INFOPLIST_FILE = Blink/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1576,6 +1575,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CODE_SIGN_ENTITLEMENTS = Blink/Blink.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1591,7 +1591,7 @@
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "";
 				HEADER_SEARCH_PATHS = $SOURCE_ROOT/Frameworks/include;
 				INFOPLIST_FILE = Blink/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
