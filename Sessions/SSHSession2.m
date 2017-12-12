@@ -66,20 +66,12 @@ struct ssh_callbacks_struct cb = {
 
   _session = ssh_new();
   
-  if (!ssh_is_connected(_session)) {
-    [self debugMsg:@"Yo!"];
-  }
+  // if (!ssh_is_connected(_session)) {
+  //   [self debugMsg:@"Yo!"];
+  // }
   
   [self client];
 
-  // Process options or take from settings
-
-  // Apply config to session
-
-  // Connect & validate server
-
-  // Login - no auto. Read key manually, etc... identity separated.
-  // Can we set ssh_key somewhere else? No, just through no auto.
   return 0;
 }
 
@@ -171,10 +163,6 @@ struct ssh_callbacks_struct cb = {
 
 - (int)client
 {
-  if (!ssh_is_connected(_session)) {
-    [self debugMsg:@"Yo!"];
-  }
-  
   [self setSessionOptions];
   
   if (![self verifyKnownHost]) {
@@ -194,15 +182,17 @@ struct ssh_callbacks_struct cb = {
     free(banner);
   }
   
-  if (![self authenticate]) {
+  if ([self authenticate] < 0) {
     return [self dieMsg:@"Authentication error"];
   }
   
-  // if (_options.tty_flag) {
-  //   [self shell];
-  // } else {
-  //   // exec
-  // }
+  
+  if (_options.request_tty) {
+    [self shell];
+  } else {
+    // exec
+    
+  }
   return 0;
 }
 
@@ -219,6 +209,8 @@ struct ssh_callbacks_struct cb = {
   if (_options.port && ssh_options_set(_session, SSH_OPTIONS_PORT, &_options.port) < 0) {
     return [self dieMsg:@"Error setting port"];
   }
+
+  ssh_options_set(_session, SSH_OPTIONS_SSH_DIR, "./");
   
   return 0;
 }
@@ -233,7 +225,6 @@ struct ssh_callbacks_struct cb = {
 {
   int rc;
   int method;
-  char *password;
   char *banner;
   
   rc = ssh_userauth_none(_session, NULL);
@@ -276,7 +267,8 @@ struct ssh_callbacks_struct cb = {
         break;
       }
     }
-
+    
+    char *password = NULL;
     fprintf(_stream.out, "Password: ");
     if ([self promptUser:&password] < 0) {
       return SSH_AUTH_ERROR;
@@ -292,7 +284,7 @@ struct ssh_callbacks_struct cb = {
         break;
       }
     }
-    memset(password, 0, sizeof(password));
+    memset(password, 0, sizeof(*password));
   }
 
   banner = ssh_get_issue_banner(_session);
@@ -313,7 +305,7 @@ struct ssh_callbacks_struct cb = {
   while (err == SSH_AUTH_INFO) {
     const char *instruction;
     const char *name;
-    char *buffer;
+
     int i, n;
 
     name = ssh_userauth_kbdint_getname(_session);
@@ -332,6 +324,7 @@ struct ssh_callbacks_struct cb = {
       const char *answer;
       const char *prompt;
       char echo;
+      char *buffer = NULL;
 
       prompt = ssh_userauth_kbdint_getprompt(_session, i, &echo);
       if (prompt == NULL) {
@@ -355,16 +348,18 @@ struct ssh_callbacks_struct cb = {
 	if (ssh_userauth_kbdint_setanswer(_session, i, buffer) < 0) {
 	  return SSH_AUTH_ERROR;
 	}
-
-	memset(buffer, 0, strlen(buffer));
+        if (buffer) {
+    memset(buffer, 0, strlen(buffer));
+          free(buffer);
+        }
       } else {
 	if (password && strstr(prompt, "Password:")) {
 	  answer = password;
 	} else {
-	  buffer[0] = '\0';
+	  //buffer[0] = '\0';
 
 	  fprintf(out, "%s", prompt);
-	  if ([self promptUser:buffer] < 0) {
+	  if ([self promptUser:&buffer] < 0) {
 	    return SSH_AUTH_ERROR;
 	  }
 	  // if (ssh_getpass(prompt, buffer, sizeof(buffer), 0, 0) < 0) {
@@ -373,7 +368,10 @@ struct ssh_callbacks_struct cb = {
 	  answer = buffer;
 	}
 	err = ssh_userauth_kbdint_setanswer(_session, i, answer);
-	memset(buffer, 0, sizeof(buffer));
+        if (buffer) {
+	memset(buffer, 0, sizeof(*buffer));
+          free(buffer);
+        }
 	if (err < 0) {
 	  return SSH_AUTH_ERROR;
 	}
@@ -402,77 +400,29 @@ struct ssh_callbacks_struct cb = {
   }
 }
 
-- (int)old_main:(int)argc argv:(char **)argv
+- (int)shell
 {
-  _session = ssh_new();
-  if (_session == NULL) {
-    return [self dieMsg:@"Couldn't start ssh session"];
-  }
-  ssh_callbacks_init(&cb);
-  ssh_set_callbacks(_session, &cb);
-  ssh_set_log_level(100);
-  // TODO: This is for some reason necessary. Maybe we need to setup threads.
-  if (!ssh_is_connected(_session)) {
-    [self debugMsg:@"Yo!"];
-  }
-  // TODO: Configure session
-  if (ssh_options_set(_session, SSH_OPTIONS_HOST, _options.hostname) < 0) {
-    [self dieMsg:@"Error setting host"];
-  }
-  if (ssh_options_set(_session, SSH_OPTIONS_USER, _options.user) < 0) {
-    [self dieMsg:@"Error setting user"];
-  }    
-  ssh_options_set(_session, SSH_OPTIONS_PORT, &_options.port);
-  // int verbosity = SSH_LOG_PROTOCOL;
-  // ssh_options_set(_session, SSH_OPTIONS_LOG_VERBOSITY, &verbosity);
-  // TODO:Log verbosity with callback.
-  int rc = ssh_connect(_session);
-  if (rc != SSH_OK) {
-    // TODO: free on die? how were we doing this before? How about on cleanup of the object?    
-    return [self dieMsg:@"Error connecting to HOST"];
-  }
-
-  // TODO: Authenticate server
-
-  // TODO: Authenticate user
-  rc = ssh_userauth_password(_session, NULL, "carl0sMBP15");
-  if (rc != SSH_AUTH_SUCCESS) {
-    return [self dieMsg:@"Wrong password"];
-  }
-
-  // TODO: Channel / Interactive & Non-Interactive Shell
   _channel = ssh_channel_new(_session);
-  if (_channel == NULL) {
+   
+  if (ssh_channel_open_session(_channel)) {
     return [self dieMsg:@"Error opening channel"];
   }
+  // TODO: Interactive vs non-interactive, but still requesting a shell?
+  ssh_channel_request_pty(_channel);
+  [self refreshSize];
 
-  rc = ssh_channel_open_session(_channel);
-  if (rc != SSH_OK) {
-    return [self dieMsg:@"Error opening channel"];
-  }
-
-  rc = ssh_channel_request_pty(_channel);
-  if (rc != SSH_OK)
-    return [self dieMsg:@"Error requesting remote pty"];
-
-  rc = ssh_channel_change_pty_size(_channel, 80, 80);
-  if (rc != SSH_OK)
-    return [self dieMsg:@"Error setting pty size"];
-  
-  rc = ssh_channel_request_shell(_channel);
-  if (rc != SSH_OK)
+  if (ssh_channel_request_shell(_channel)) {
     return [self dieMsg:@"Error requesting shell"];
-
-  [self debugMsg:@"Entering loop"];
-  // Probably not needed, closed within the sesison.
-  // ssh_channel_close(_channel);
-  // ssh_channel_send_eof(_channel);
-  // ssh_channel_free(_channel);
+  }
+  
   [self loop];
+  return 1;
+}
 
-  ssh_disconnect(_session);
-  ssh_free(_session);
-  return 0;
+- (void)refreshSize {
+  ssh_channel_change_pty_size(_channel,
+			      _stream.sz->ws_col,
+			      _stream.sz->ws_row);  
 }
 
 - (void)processUserHostSettings:(NSString *)userhost
@@ -511,14 +461,13 @@ struct ssh_callbacks_struct cb = {
   }
 }
 
-
 - (void)loop
 {
   ssh_connector connector_in, connector_out, connector_err;
   ssh_event event = ssh_event_new();
   
-  //  ssh_set_blocking(_session, 0);
-  //  ssh_channel_set_blocking(_channel, 0);
+  ssh_set_blocking(_session, 0);
+  ssh_channel_set_blocking(_channel, 0);
   /* stdin */
   connector_in = ssh_connector_new(_session);
   ssh_connector_set_out_channel(connector_in, _channel, SSH_CONNECTOR_STDOUT);
@@ -537,7 +486,7 @@ struct ssh_callbacks_struct cb = {
 //  ssh_connector_set_in_channel(connector_err, _channel, SSH_CONNECTOR_STDERR);
 //  ssh_event_add_connector(event, connector_err);
 
-  while(1){
+  while(ssh_channel_is_open(_channel)){
     //    if(signal_delayed)
     //      sizechanged();
     ssh_event_dopoll(event, 60000);
@@ -575,12 +524,7 @@ struct ssh_callbacks_struct cb = {
 - (void)sigwinch
 {
   // TODO: Fails when changing apps, etc... if there is no app yet.
-  ssh_channel_change_pty_size(_channel,
-			      _stream.sz->ws_col, 
-			      _stream.sz->ws_row);
-  // libssh2_channel_request_pty_size(_channel,
-  // 				   _stream.sz->ws_col,
-  // 				   _stream.sz->ws_row);
+  [self refreshSize];
 }
 
 @end
