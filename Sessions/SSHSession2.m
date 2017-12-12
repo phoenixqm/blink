@@ -21,8 +21,7 @@ static const char *usage_format =
   "\r\n";
 
 typedef struct {
-  int address_family;
-  int connection_timeout;
+  int verbosity;
   int port;
   const char *hostname;
   const char *user;
@@ -38,14 +37,9 @@ typedef struct {
 
 void loggingEvent(ssh_session session, int priority, const char *message, void *userdata)
 {
-  //printf("%s\n", message);
+  FILE *out = (FILE *)userdata;
+  fprintf(out, "%s\r\n", message);
 }
-
-struct ssh_callbacks_struct cb = {
-  .userdata = NULL,
-  .auth_function = NULL
-  //.log_function = loggingEvent
-};
 
 @implementation SSHSession2 {
   session_options _options;
@@ -64,12 +58,6 @@ struct ssh_callbacks_struct cb = {
     return [self usage];
   }
 
-  _session = ssh_new();
-  
-  // if (!ssh_is_connected(_session)) {
-  //   [self debugMsg:@"Yo!"];
-  // }
-  
   [self client];
 
   return 0;
@@ -77,7 +65,7 @@ struct ssh_callbacks_struct cb = {
 
 - (int)opts:(int)argc argv:(char **)argv
 {
-    // Options
+  // Options
   // port -p
   // verbose --verbose
   // command (Obtain data at the end)
@@ -103,7 +91,7 @@ struct ssh_callbacks_struct cb = {
         _options.disableHostKeyCheck = true;
         break;
       case 'v':
-	_debug = 1;
+	_options.verbosity = SSH_LOG_PROTOCOL;
 	break;
       case 'i':
 	_options.identity_file = optarg;
@@ -158,11 +146,14 @@ struct ssh_callbacks_struct cb = {
   } else {
     _options.request_tty = REQUEST_TTY_YES;
   }
+
   return 0;
 }
 
 - (int)client
 {
+  _session = ssh_new();
+  
   [self setSessionOptions];
   
   if (![self verifyKnownHost]) {
@@ -184,8 +175,7 @@ struct ssh_callbacks_struct cb = {
   
   if ([self authenticate] < 0) {
     return [self dieMsg:@"Authentication error"];
-  }
-  
+  }  
   
   if (_options.request_tty) {
     [self shell];
@@ -198,6 +188,13 @@ struct ssh_callbacks_struct cb = {
 
 - (int)setSessionOptions
 {
+  //ssh_callbacks_init(&cb);
+  //ssh_set_callbacks(_session, &cb);
+//  ssh_set_log_level(100);
+  if (!ssh_is_connected(_session)) {
+    [self debugMsg:@"Yo!"];
+  }
+
   if (ssh_options_set(_session, SSH_OPTIONS_HOST, _options.hostname) < 0) {
     return [self dieMsg:@"Error setting Host"];
   }
@@ -211,7 +208,14 @@ struct ssh_callbacks_struct cb = {
   }
 
   ssh_options_set(_session, SSH_OPTIONS_SSH_DIR, "./");
-  
+
+  if (_options.verbosity) {
+//    ssh_options_set(_session, SSH_OPTIONS_LOG_VERBOSITY, &_options.verbosity);
+    ssh_set_log_callback(loggingEvent);
+    ssh_set_log_userdata(_stream.out);
+    ssh_set_log_level(_options.verbosity);
+  }
+
   return 0;
 }
 
@@ -334,16 +338,6 @@ struct ssh_callbacks_struct cb = {
       if (echo) {
         fprintf(out, "%s", prompt);
         [self promptUser: &buffer];
-	//char *p;
-
-	// if (fgets(buffer, sizeof(buffer), _stream.in) == NULL) {
-	//   return SSH_AUTH_ERROR;
-	// }
-
-	// buffer[sizeof(buffer) - 1] = '\0';
-	// if ((p = strchr(buffer, '\n'))) {
-	//   *p = '\0';p
-	// }
 
 	if (ssh_userauth_kbdint_setanswer(_session, i, buffer) < 0) {
 	  return SSH_AUTH_ERROR;
