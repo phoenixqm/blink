@@ -35,7 +35,7 @@
 #import "BKPubKeyCreateViewController.h"
 #import "BKPubKeyDetailsViewController.h"
 #import "BKPubKeyViewController.h"
-
+#import "SshRsa.h"
 
 @interface BKPubKeyViewController ()
 

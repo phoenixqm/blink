@@ -32,13 +32,13 @@
 #import <UIKit/UIKit.h>
 
 #import "BKPubKey.h"
-#import "SshRsa.h"
+#import "SshPKI.h"
 
 @interface BKPubKeyCreateViewController : UITableViewController
 
 @property (weak, nonatomic) BKPubKey *pubkey;
 @property (weak, nonatomic) NSString *passphrase;
 @property (weak, nonatomic) NSString *name;
-@property (weak, nonatomic) SshRsa *key;
+@property (weak, nonatomic) SshPKI *key;
 
 @end

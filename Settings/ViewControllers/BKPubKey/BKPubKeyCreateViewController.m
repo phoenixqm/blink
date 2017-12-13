@@ -29,6 +29,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <libssh/libssh.h>
+
 #import "BKPubKeyCreateViewController.h"
 #import "BKDefaults.h"
 #import "UIDevice+DeviceName.h"
@@ -102,7 +104,7 @@
       NSInteger selectedIndex = [_sizeField selectedSegmentIndex];
       int length = [[_sizeField titleForSegmentAtIndex:selectedIndex] intValue];
       // Create and return
-      SshRsa *key = _key ? _key : [[SshRsa alloc] initWithLength:length];
+      SshPKI *key = _key ? _key : [[SshPKI alloc] initWithType:SSH_KEYTYPE_RSA length:length];
       _pubkey = [BKPubKey saveCard:_nameField.text privateKey:[key privateKeyWithPassphrase:_passphraseField.text] publicKey:[key publicKeyWithComment:_commentsField.text]];
       if (!_pubkey) {
         errorMsg = @"OpenSSL error. Could not create Public Key.";

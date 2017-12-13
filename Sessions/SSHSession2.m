@@ -238,6 +238,7 @@ void loggingEvent(ssh_session session, int priority, const char *message, void *
   
   method = ssh_userauth_list(_session, NULL);
   while (rc != SSH_AUTH_SUCCESS) {
+    // Disabled for now, as we are compiling libssh without gssapi support.
     // if (method & SSH_AUTH_METHOD_GSSAPI_MIC){
     //   rc = ssh_userauth_gssapi(session);
     //   if(rc == SSH_AUTH_ERROR) {
@@ -247,12 +248,13 @@ void loggingEvent(ssh_session session, int priority, const char *message, void *
     // 	break;
     //   }
     // }
+
     // Try to authenticate with public key first
     if (method & SSH_AUTH_METHOD_PUBLICKEY) {
-      rc = ssh_userauth_publickey_auto(_session, NULL, NULL);
+      rc = [self authPublicKey]; //ssh_userauth_publickey_auto(_session, NULL, NULL);
       if (rc == SSH_AUTH_ERROR) {
 	// TODO: Print Error message
-	// [sshError @"Authentication failed: "]
+	// [self sshError:@"Authentication failed"] - wrapped within a function to use ssh_error_message
 	//error(session);
 	return rc;
       } else if (rc == SSH_AUTH_SUCCESS) {
@@ -260,7 +262,7 @@ void loggingEvent(ssh_session session, int priority, const char *message, void *
       }
     }
 
-    // Try to authenticate with keyboard interactive";
+    // Try to authenticate with keyboard interactive
     if (method & SSH_AUTH_METHOD_INTERACTIVE) {
       // TODO: Pass initial password from default
       rc = [self authInteractive:NULL];
@@ -299,6 +301,35 @@ void loggingEvent(ssh_session session, int priority, const char *message, void *
 
   return rc;
 }
+
+- (int)authPublicKey
+{
+  // Try all the identities until finding a successful one, and return
+  NSArray *identities = [self getIdentities];
+  
+
+  return SSH_AUTH_SUCCESS;
+}
+
+- (NSArray *)getIdentities
+{
+  // Obtain valid auths that will be tried for the connection
+  NSMutableArray *identities = [[NSMutableArray alloc] init];
+  BKPubKey *pk;
+
+  if (_options.identity_file) {
+    if ((pk = [BKPubKey withID:[NSString stringWithUTF8String:_options.identity_file]]) != nil) {
+      [identities addObject:pk];
+    }
+  }
+
+  if ((pk = [BKPubKey withID:@"id_rsa"]) != nil) {
+    [identities addObject:pk];
+  }
+
+  return identities;
+}
+
 
 - (int)authInteractive:(const char *)password
 {

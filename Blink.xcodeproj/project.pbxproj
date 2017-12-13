@@ -18,6 +18,7 @@
 		0720FF9A1FE0366C00843426 /* libsshd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0720FF991FE0366C00843426 /* libsshd.a */; };
 		0720FF9B1FE0373500843426 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0732F12A1D06324B00AB5438 /* libstdc++.tbd */; };
 		0720FF9E1FE1873A00843426 /* SshRsa.m in Sources */ = {isa = PBXBuildFile; fileRef = 0720FF9D1FE1873A00843426 /* SshRsa.m */; };
+		0720FFA11FE1BF1E00843426 /* SshPKI.m in Sources */ = {isa = PBXBuildFile; fileRef = 0720FFA01FE1BF1E00843426 /* SshPKI.m */; };
 		0728A1DA1E0AE80400ABD31B /* SmartKeysController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0728A1D91E0AE80400ABD31B /* SmartKeysController.m */; };
 		0732F04C1D062B9A00AB5438 /* hterm_all.js in Resources */ = {isa = PBXBuildFile; fileRef = 0732F0491D062B9A00AB5438 /* hterm_all.js */; };
 		0732F04D1D062B9A00AB5438 /* locales.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0732F04A1D062B9A00AB5438 /* locales.bundle */; };
@@ -299,6 +300,8 @@
 		0720FF991FE0366C00843426 /* libsshd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsshd.a; sourceTree = "<group>"; };
 		0720FF9C1FE1873A00843426 /* SshRsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SshRsa.h; sourceTree = "<group>"; };
 		0720FF9D1FE1873A00843426 /* SshRsa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SshRsa.m; sourceTree = "<group>"; };
+		0720FF9F1FE1BF1D00843426 /* SshPKI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SshPKI.h; sourceTree = "<group>"; };
+		0720FFA01FE1BF1E00843426 /* SshPKI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SshPKI.m; sourceTree = "<group>"; };
 		0728A1D81E0AE80400ABD31B /* SmartKeysController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartKeysController.h; sourceTree = "<group>"; };
 		0728A1D91E0AE80400ABD31B /* SmartKeysController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmartKeysController.m; sourceTree = "<group>"; };
 		0732F0491D062B9A00AB5438 /* hterm_all.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = hterm_all.js; sourceTree = "<group>"; };
@@ -796,6 +799,8 @@
 		B7B3FC3A1DF5E96900B3D37C /* Security */ = {
 			isa = PBXGroup;
 			children = (
+				0720FF9F1FE1BF1D00843426 /* SshPKI.h */,
+				0720FFA01FE1BF1E00843426 /* SshPKI.m */,
 				B7B3FC3E1DF5E99200B3D37C /* BKTouchIDAuthManager.h */,
 				B7B3FC3F1DF5E99200B3D37C /* BKTouchIDAuthManager.m */,
 				0720FF9C1FE1873A00843426 /* SshRsa.h */,
@@ -1260,6 +1265,7 @@
 				07F670761D05EEE200C0A53C /* SSHCopyIDSession.m in Sources */,
 				07AA06551E08B12E008310B7 /* PasscodeLockType.swift in Sources */,
 				B752EE2B1DFEF19D00E305C8 /* BKUserConfigurationManager.m in Sources */,
+				0720FFA11FE1BF1E00843426 /* SshPKI.m in Sources */,
 				C9B2E0351D6B612400B89F69 /* BKSettingsFileDownloader.m in Sources */,
 				C989E5561D6CC4A1003E0079 /* BKAppearanceViewController.m in Sources */,
 				C989E54B1D6CC488003E0079 /* BKHostsViewController.m in Sources */,
