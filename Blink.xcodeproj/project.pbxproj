@@ -17,6 +17,7 @@
 		0716B5A81CFFABB000268B5B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0716B5A61CFFABB000268B5B /* Info.plist */; };
 		0720FF9A1FE0366C00843426 /* libsshd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0720FF991FE0366C00843426 /* libsshd.a */; };
 		0720FF9B1FE0373500843426 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0732F12A1D06324B00AB5438 /* libstdc++.tbd */; };
+		0720FF9E1FE1873A00843426 /* SshRsa.m in Sources */ = {isa = PBXBuildFile; fileRef = 0720FF9D1FE1873A00843426 /* SshRsa.m */; };
 		0728A1DA1E0AE80400ABD31B /* SmartKeysController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0728A1D91E0AE80400ABD31B /* SmartKeysController.m */; };
 		0732F04C1D062B9A00AB5438 /* hterm_all.js in Resources */ = {isa = PBXBuildFile; fileRef = 0732F0491D062B9A00AB5438 /* hterm_all.js */; };
 		0732F04D1D062B9A00AB5438 /* locales.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0732F04A1D062B9A00AB5438 /* locales.bundle */; };
@@ -296,6 +297,8 @@
 		0716B5A51CFFABB000268B5B /* BlinkUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlinkUITests.m; sourceTree = "<group>"; };
 		0716B5A61CFFABB000268B5B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0720FF991FE0366C00843426 /* libsshd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsshd.a; sourceTree = "<group>"; };
+		0720FF9C1FE1873A00843426 /* SshRsa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SshRsa.h; sourceTree = "<group>"; };
+		0720FF9D1FE1873A00843426 /* SshRsa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SshRsa.m; sourceTree = "<group>"; };
 		0728A1D81E0AE80400ABD31B /* SmartKeysController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartKeysController.h; sourceTree = "<group>"; };
 		0728A1D91E0AE80400ABD31B /* SmartKeysController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmartKeysController.m; sourceTree = "<group>"; };
 		0732F0491D062B9A00AB5438 /* hterm_all.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = hterm_all.js; sourceTree = "<group>"; };
@@ -795,6 +798,8 @@
 			children = (
 				B7B3FC3E1DF5E99200B3D37C /* BKTouchIDAuthManager.h */,
 				B7B3FC3F1DF5E99200B3D37C /* BKTouchIDAuthManager.m */,
+				0720FF9C1FE1873A00843426 /* SshRsa.h */,
+				0720FF9D1FE1873A00843426 /* SshRsa.m */,
 			);
 			path = Security;
 			sourceTree = "<group>";
@@ -1304,6 +1309,7 @@
 				079635871D0E6602000473B1 /* TermView.m in Sources */,
 				C989E54E1D6CC488003E0079 /* BKKeyboardViewController.m in Sources */,
 				07AA06591E08B12E008310B7 /* PasscodeSignPlaceholderView.swift in Sources */,
+				0720FF9E1FE1873A00843426 /* SshRsa.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

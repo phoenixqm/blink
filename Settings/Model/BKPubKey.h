@@ -33,16 +33,6 @@
 #import <UIKit/UIKit.h>
 
 
-@interface SshRsa : NSObject
-
-- (SshRsa *)initWithLength:(int)bits;
-- (SshRsa *)initFromPrivateKey:(NSString *)privateKey passphrase:(NSString *)passphrase;
-- (NSString *)privateKey;
-- (NSString *)privateKeyWithPassphrase:(NSString *)passphrase;
-- (NSString *)publicKeyWithComment:(NSString*)comment;
-
-@end
-
 @interface BKPubKey : NSObject <NSCoding, UIActivityItemSource>
 
 @property NSString *ID;

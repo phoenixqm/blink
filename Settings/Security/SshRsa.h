@@ -29,16 +29,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "BKPubKey.h"
-#import "SshRsa.h"
 
-@interface BKPubKeyCreateViewController : UITableViewController
+@interface SshRsa : NSObject
 
-@property (weak, nonatomic) BKPubKey *pubkey;
-@property (weak, nonatomic) NSString *passphrase;
-@property (weak, nonatomic) NSString *name;
-@property (weak, nonatomic) SshRsa *key;
+- (SshRsa *)initWithLength:(int)bits;
+- (SshRsa *)initFromPrivateKey:(NSString *)privateKey passphrase:(NSString *)passphrase;
+- (NSString *)privateKey;
+- (NSString *)privateKeyWithPassphrase:(NSString *)passphrase;
+- (NSString *)publicKeyWithComment:(NSString*)comment;
 
 @end
