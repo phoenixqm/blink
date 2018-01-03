@@ -41,5 +41,6 @@
 - (id)initWithInputStream:(FILE *)tIn outputStream:(FILE *)tOut;
 - (int)main:(int)argc argv:(char **)argv;
 - (void)close;
+- (int)prompt:(char *)prompt output:(char *)buf;
 
 @end

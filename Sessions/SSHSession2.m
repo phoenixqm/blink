@@ -190,7 +190,7 @@ void loggingEvent(ssh_session session, int priority, const char *message, void *
 {
   //ssh_callbacks_init(&cb);
   //ssh_set_callbacks(_session, &cb);
-//  ssh_set_log_level(100);
+  //  ssh_set_log_level(100);
   if (!ssh_is_connected(_session)) {
     [self debugMsg:@"Yo!"];
   }
@@ -306,9 +306,43 @@ void loggingEvent(ssh_session session, int priority, const char *message, void *
 {
   // Try all the identities until finding a successful one, and return
   NSArray *identities = [self getIdentities];
-  
+ 
+  for (BKPubKey *pk in identities) {
+    // Import the private key and try it
+    int rc;
+    ssh_key privkey;
+    const char *ckey = [pk.privateKey UTF8String];
+    [self debugMsg:[NSString stringWithFormat:@"Attempting authentication with key: %@", pk.ID]];
+    
+    // TODO: Request passphrase through interface
+    // TODO: The agent can then store decrypted ssh_key objects, and free them once done.
+    // TODO: The agent should be the one responsible to decrypt the key
+    if (ssh_pki_import_privkey_base64(ckey, NULL, &authCallback,
+                                      (__bridge void *)(self), &privkey) == SSH_ERROR) {
+      [self debugMsg:[NSString stringWithFormat:@"Error importing key %@ - %s", pk.ID, ssh_get_error(_session)]];
+      continue;
+    }
+    
+    rc = ssh_userauth_publickey(_session, _options.user, privkey);
+    if (rc == SSH_AUTH_SUCCESS) {
+      return rc;
+    }
+  } 
 
-  return SSH_AUTH_SUCCESS;
+  return SSH_AUTH_DENIED;
+}
+
+- (int)prompt:(char *)prompt output:(char *)buf
+{
+  fprintf(_stream.out, "%s", prompt);
+  return [self promptUser:&buf];
+}
+
+static int authCallback(const char *prompt, char *buf, size_t len,
+			int echo, int verify, void *userdata)
+{
+  SSHSession2 *s = (__bridge SSHSession2 *)(userdata);
+  return [s prompt:prompt output:buf];
 }
 
 - (NSArray *)getIdentities
